@@ -1,6 +1,5 @@
 const { NotImplementedError } = require('../extensions/index.js');
-
-// const { ListNode } = require('../extensions/list-node.js');
+const { ListNode } = require('../extensions/list-node.js');
 
 /**
  * Implement the Queue with a given interface via linked list (use ListNode extension above).
@@ -14,20 +13,51 @@ const { NotImplementedError } = require('../extensions/index.js');
  * queue.getUnderlyingList() // returns { value: 3, next: null }
  */
 class Queue {
-
-  getUnderlyingList() {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+  constructor() {
+    // Создаем пустой список для хранения элементов очереди
+    this.head = null;
+    this.tail = null;
   }
 
-  enqueue(/* value */) {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+  getUnderlyingList() {
+    // Возвращаем связанный список, представляющий очередь
+    return this.head;
+  }
+
+  enqueue(value) {
+    // Создаем новый узел со значением value
+    const newNode = new ListNode(value);
+
+    if (!this.head) {
+      // Если очередь пуста, новый узел становится и головой, и хвостом
+      this.head = newNode;
+      this.tail = newNode;
+    } else {
+      // Иначе, добавляем новый узел в конец очереди и обновляем хвост
+      this.tail.next = newNode;
+      this.tail = newNode;
+    }
   }
 
   dequeue() {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+    // Если очередь пуста, возвращаем undefined
+    if (!this.head) {
+      return undefined;
+    }
+
+    // Получаем значение из головы очереди
+    const value = this.head.value;
+
+    // Удаляем голову очереди, смещая указатель на следующий узел
+    this.head = this.head.next;
+
+    // Если очередь стала пустой, обновляем хвост
+    if (!this.head) {
+      this.tail = null;
+    }
+
+    // Возвращаем удаленное значение
+    return value;
   }
 }
 

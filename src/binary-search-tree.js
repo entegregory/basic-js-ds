@@ -1,49 +1,105 @@
 const { NotImplementedError } = require('../extensions/index.js');
-
 // const { Node } = require('../extensions/list-tree.js');
 
 /**
-* Implement simple binary search tree according to task description
-* using Node from extensions
-*/
+ * Implement simple binary search tree according to task description
+ * using Node from extensions
+ */
 class BinarySearchTree {
+  constructor() {
+    this.rootNode = null; // инициализация корня дерева
+  }
 
+  // возвращение корня дерева
   root() {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+    return this.rootNode;
   }
 
-  add(/* data */) {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+  // добавление уза с данными в дерево
+  add(data) {
+    const newNode = new Node(data); // создание нового узла
+
+    if (!this.rootNode) {
+      this.rootNode = newNode; // если корня нет, устанавливаем новый узел в качестве корня
+      return;
+    }
+
+    let currentNode = this.rootNode;
+    while (currentNode) {
+      if (data < currentNode.data) {
+        if (!currentNode.left) {
+          currentNode.left = newNode; // добавляем узел слева, если слева нет узла
+          break;
+        }
+        currentNode = currentNode.left;
+      } else {
+        if (!currentNode.right) {
+          currentNode.right = newNode; // добавляем узел справа, если справа нет узла
+          break;
+        }
+        currentNode = currentNode.right;
+      }
+    }
   }
 
-  has(/* data */) {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+  // проверяем, есть ли узел с данными в дереве
+  has(data) {
+    let currentNode = this.rootNode;
+    while (currentNode) {
+      if (data === currentNode.data) {
+        return true; // возвращаем true, если узел с данными найден
+      }
+      currentNode = data < currentNode.data ? currentNode.left : currentNode.right;
+    }
+    return false;
   }
 
-  find(/* data */) {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+  // находим узел с данными, если он существует в дереве
+  find(data) {
+    let currentNode = this.rootNode;
+    while (currentNode) {
+      if (data === currentNode.data) {
+        return currentNode; // возвращаем узел, если он найден
+      }
+      currentNode = data < currentNode.data ? currentNode.left : currentNode.right;
+    }
+    return null; // возвращаем null, если узел не найден
   }
 
-  remove(/* data */) {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+  // удаляем узел с данными из дерева
+  remove(data) {
+    this.rootNode = this.removeNode(this.rootNode, data);
   }
 
-  min() {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
-  }
+  // рекурсивная функция для удаления узла
+  removeNode(node, data) {
+    if (!node) {
+      return null;
+    }
 
-  max() {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
-  }
-}
+    if (data < node.data) {
+      node.left = this.removeNode(node.left, data);
+      return node;
+    } else if (data > node.data) {
+      node.right = this.removeNode(node.right, data);
+      return node;
+    } else {
+      if (!node.left && !node.right) {
+        return null;
+      }
 
-module.exports = {
-  BinarySearchTree
-};
+      if (!node.left) {
+        return node.right;
+      }
+
+      if (!node.right) {
+        return node.left;
+      }
+
+      let minRight = node.right;
+      while (minRight.left) {
+        minRight = minRight.left;
+      }
+      node.data = minRight.data;
+
+      node.right = this.removeNode(node.right, minRight.data);
