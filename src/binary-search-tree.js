@@ -1,24 +1,30 @@
 const { Node } = require('../extensions/list-tree.js');
+
 class BinarySearchTree {
+  // Конструктор класса
   constructor() {
-    this._root = null;
+    this._root = null; // Инициализация корня дерева как пустого значения
   }
 
+  // Возвращает корень дерева
   root() {
     return this._root;
   }
 
+  // Добавление нового узла с данными в дерево
   add(data) {
-    const newNode = new Node(data);
+    const newNode = new Node(data); // Создаем новый узел с данными
 
+    // Если корень дерева пуст, делаем новый узел корнем дерева
     if (this._root === null) {
       this._root = newNode;
       return;
     }
 
-    let currentNode = this._root;
-    let parentNode = null;
+    let currentNode = this._root; // Устанавливаем текущий узел в корень дерева
+    let parentNode = null; // Инициализация родительского узла как пустого значения
 
+    // Проходим по дереву, пока не найдем пустой узел для нового узла
     while (currentNode !== null) {
       parentNode = currentNode;
       if (data < currentNode.data) {
@@ -28,6 +34,7 @@ class BinarySearchTree {
       }
     }
 
+    // Добавляем новый узел в дерево в соответствии с его данными
     if (data < parentNode.data) {
       parentNode.left = newNode;
     } else {
@@ -35,10 +42,12 @@ class BinarySearchTree {
     }
   }
 
+  // Проверка наличия узла с определенными данными в дереве
   has(data) {
     return this.find(data) !== null;
   }
 
+  // Вспомогательный метод для поиска узла с определенными данными, начиная с заданного узла
   _findNode(node, data) {
     if (node === null) {
       return null;
@@ -55,10 +64,12 @@ class BinarySearchTree {
     }
   }
 
+  // Поиск узла с определенными данными в дереве
   find(data) {
     return this._findNode(this._root, data);
   }
 
+  // Вспомогательный метод для поиска узла с минимальным значением, начиная с заданного узла
   _findMinNode(node) {
     while (node.left !== null) {
       node = node.left;
@@ -66,6 +77,7 @@ class BinarySearchTree {
     return node;
   }
 
+  // Вспомогательный метод для удаления узла с определенными данными, начиная с заданного узла
   _removeNode(node, data) {
     if (node === null) {
       return null;
