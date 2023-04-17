@@ -1,5 +1,6 @@
+//импортируем из файла list-tree.js, как указано в условии задачи
 const { Node } = require('../extensions/list-tree.js');
-// Импортируем класс Node из файла list-tree.js
+
 class BinarySearchTree {
   // Конструктор класса
   constructor() {
@@ -105,61 +106,45 @@ class BinarySearchTree {
         return node.left
       }
 
-      // Удаление узла с двумя дочерними узлами
-      // Находим узел с минимальным значением в правом поддереве
       const minNode = this._findMinNode(node.right);
-      // Присваиваем значение найденного узла текущему узлу
       node.data = minNode.data;
 
-      // Удаляем найденный узел с минимальным значением из правого поддерева
       node.right = this._removeNode(node.right, minNode.data);
-      // Возвращаем текущий узел с обновленным значением
       return node;
-    }
-    // Метод удаления узла по заданному значению
-    remove(data) {
-      // Обновляем корень дерева после удаления узла с заданным значением
-      this._root = this._removeNode(this._root, data);
-    }
-
-    // Метод для нахождения минимального значения в дереве
-    min() {
-      // Если корень дерева пуст, возвращаем null
-      if (this._root === null) {
-        return null;
-      }
-
-      // Инициализируем текущий узел корнем дерева
-      let currentNode = this._root;
-      // Проходим по левым узлам дерева, пока не дойдем до самого левого узла
-      while (currentNode.left !== null) {
-        currentNode = currentNode.left;
-      }
-
-      // Возвращаем значение самого левого узла (минимальное значение)
-      return currentNode.data;
-    }
-
-    // Метод для нахождения максимального значения в дереве
-    max() {
-      // Если корень дерева пуст, возвращаем null
-      if (this._root === null) {
-        return null;
-      }
-
-      // Инициализируем текущий узел корнем дерева
-      let currentNode = this._root;
-      // Проходим по правым узлам дерева, пока не дойдем до самого правого узла
-      while (currentNode.right !== null) {
-        currentNode = currentNode.right;
-      }
-
-      // Возвращаем значение самого правого узла (максимальное значение)
-      return currentNode.data;
     }
   }
 
-// Экспортируем класс BinarySearchTree для использования в других файлах
+  remove(data) {
+    this._root = this._removeNode(this._root, data);
+  }
+
+  min() {
+    if (this._root === null) {
+      return null;
+    }
+
+    let currentNode = this._root;
+    while (currentNode.left !== null) {
+      currentNode = currentNode.left;
+    }
+
+    return currentNode.data;
+  }
+
+  max() {
+    if (this._root === null) {
+      return null;
+    }
+
+    let currentNode = this._root;
+    while (currentNode.right !== null) {
+      currentNode = currentNode.right;
+    }
+
+    return currentNode.data;
+  }
+}
+
 module.exports = {
   BinarySearchTree
 };
