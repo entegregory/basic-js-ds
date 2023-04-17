@@ -1,5 +1,5 @@
 const { Node } = require('../extensions/list-tree.js');
-
+// Импортируем класс Node из файла list-tree.js
 class BinarySearchTree {
   // Конструктор класса
   constructor() {
@@ -11,20 +11,21 @@ class BinarySearchTree {
     return this._root;
   }
 
-  // Добавление нового узла с данными в дерево
+  // Метод добавления значения в дерево
   add(data) {
-    const newNode = new Node(data); // Создаем новый узел с данными
+    const newNode = new Node(data); // Создание нового узла с переданным значением
 
-    // Если корень дерева пуст, делаем новый узел корнем дерева
+    // Если корень дерева пуст, делаем новый узел корнем
     if (this._root === null) {
       this._root = newNode;
       return;
     }
 
-    let currentNode = this._root; // Устанавливаем текущий узел в корень дерева
-    let parentNode = null; // Инициализация родительского узла как пустого значения
+    // Поиск места для вставки нового узла
+    let currentNode = this._root;
+    let parentNode = null;
 
-    // Проходим по дереву, пока не найдем пустой узел для нового узла
+    // Перебор узлов до тех пор, пока не найдем пустое место для вставки
     while (currentNode !== null) {
       parentNode = currentNode;
       if (data < currentNode.data) {
@@ -34,7 +35,7 @@ class BinarySearchTree {
       }
     }
 
-    // Добавляем новый узел в дерево в соответствии с его данными
+    // Вставка нового узла в найденное место
     if (data < parentNode.data) {
       parentNode.left = newNode;
     } else {
@@ -42,12 +43,12 @@ class BinarySearchTree {
     }
   }
 
-  // Проверка наличия узла с определенными данными в дереве
+  // Метод проверки наличия значения в дереве
   has(data) {
     return this.find(data) !== null;
   }
 
-  // Вспомогательный метод для поиска узла с определенными данными, начиная с заданного узла
+  // Вспомогательный метод поиска узла по значению
   _findNode(node, data) {
     if (node === null) {
       return null;
@@ -64,12 +65,12 @@ class BinarySearchTree {
     }
   }
 
-  // Поиск узла с определенными данными в дереве
+  // Метод поиска узла по значению
   find(data) {
     return this._findNode(this._root, data);
   }
 
-  // Вспомогательный метод для поиска узла с минимальным значением, начиная с заданного узла
+  // Вспомогательный метод поиска узла с минимальным значением
   _findMinNode(node) {
     while (node.left !== null) {
       node = node.left;
@@ -77,7 +78,7 @@ class BinarySearchTree {
     return node;
   }
 
-  // Вспомогательный метод для удаления узла с определенными данными, начиная с заданного узла
+  // Вспомогательный метод удаления узла по значению
   _removeNode(node, data) {
     if (node === null) {
       return null;
@@ -90,57 +91,75 @@ class BinarySearchTree {
       node.right = this._removeNode(node.right, data);
       return node;
     } else {
+      // Удаление узла без дочерних узлов
       if (node.left === null && node.right === null) {
         return null;
       }
 
+      // Удаление узла с одним дочерним узлом
       if (node.left === null) {
         return node.right;
       }
 
       if (node.right === null) {
-        return node.left;
+        return node.left
       }
 
+      // Удаление узла с двумя дочерними узлами
+      // Находим узел с минимальным значением в правом поддереве
       const minNode = this._findMinNode(node.right);
+      // Присваиваем значение найденного узла текущему узлу
       node.data = minNode.data;
 
+      // Удаляем найденный узел с минимальным значением из правого поддерева
       node.right = this._removeNode(node.right, minNode.data);
+      // Возвращаем текущий узел с обновленным значением
       return node;
     }
-  }
-
-  remove(data) {
-    this._root = this._removeNode(this._root, data);
-  }
-
-  min() {
-    if (this._root === null) {
-      return null;
+    // Метод удаления узла по заданному значению
+    remove(data) {
+      // Обновляем корень дерева после удаления узла с заданным значением
+      this._root = this._removeNode(this._root, data);
     }
 
-    let currentNode = this._root;
-    while (currentNode.left !== null) {
-      currentNode = currentNode.left;
+    // Метод для нахождения минимального значения в дереве
+    min() {
+      // Если корень дерева пуст, возвращаем null
+      if (this._root === null) {
+        return null;
+      }
+
+      // Инициализируем текущий узел корнем дерева
+      let currentNode = this._root;
+      // Проходим по левым узлам дерева, пока не дойдем до самого левого узла
+      while (currentNode.left !== null) {
+        currentNode = currentNode.left;
+      }
+
+      // Возвращаем значение самого левого узла (минимальное значение)
+      return currentNode.data;
     }
 
-    return currentNode.data;
+    // Метод для нахождения максимального значения в дереве
+    max() {
+      // Если корень дерева пуст, возвращаем null
+      if (this._root === null) {
+        return null;
+      }
+
+      // Инициализируем текущий узел корнем дерева
+      let currentNode = this._root;
+      // Проходим по правым узлам дерева, пока не дойдем до самого правого узла
+      while (currentNode.right !== null) {
+        currentNode = currentNode.right;
+      }
+
+      // Возвращаем значение самого правого узла (максимальное значение)
+      return currentNode.data;
+    }
   }
 
-  max() {
-    if (this._root === null) {
-      return null;
-    }
-
-    let currentNode = this._root;
-    while (currentNode.right !== null) {
-      currentNode = currentNode.right;
-    }
-
-    return currentNode.data;
-  }
-}
-
+// Экспортируем класс BinarySearchTree для использования в других файлах
 module.exports = {
   BinarySearchTree
 };
